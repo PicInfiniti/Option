@@ -1,6 +1,14 @@
+import re
 from flask import Flask, render_template, request
 from flask_cors import CORS
-import requests
+import requests, time, json
+
+from pymongo import MongoClient
+
+tsetmc = MongoClient("mongodb://localhost/")["tsetmc"]
+OPTION = tsetmc.option
+
+
 
 
 
@@ -19,6 +27,9 @@ def home():
 
 @server.route('/option' ,methods=['GET'])
 def option():
-  return requests.get('https://tse.ir/json/MarketWatch/data_7.json',verify = False).content
+  return OPTION.find_one()
+
+
+
 if __name__ == '__main__':
   server.run(host= '0.0.0.0',use_reloader=False, port=5000, debug = True, threaded = True)

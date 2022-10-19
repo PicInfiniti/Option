@@ -7,20 +7,49 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Vite App</title>
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     table,
     th,
     td {
-      border: 1px solid black;
+      border: 1px solid rgb(41, 41, 41);
       text-align: right;
+    }
+
+    table {
+      text-align: left;
+      position: relative;
+    }
+
+    #option thead {
+      background-color: green;
+      /* position: sticky;
+     // top: 0;*/
+    }
+
+    #Search {
+      background-image: url('./assets/icon/search.svg');
+      background-position: 10px 10px;
+      background-repeat: no-repeat;
+      background-size: 25px;
+      width: 100%;
+      font-size: 16px;
+      padding: 12px 20px 12px 40px;
+      border: 1px solid #ddd;
+      margin-bottom: 12px;
     }
   </style>
   <script type="module" src="./main.js" defer></script>
 </head>
 
 <body dir="rtl">
+  <input type="text" id="Search" placeholder="جستجو..." title="Type in a name">
   <table style="width:100%" id='option'>
     <thead>
       <tr>
+        <th style="display: none">parent</th>
         <th>نماد</th>
         <th>نام</th>
         <th>قیمت تسویه امروز</th>
@@ -29,14 +58,16 @@
         <th>ارزش معاملات</th>
         <th>دفعات معاملات</th>
         <th>آخرین قیمت</th>
-        <th>حجم</th>
-        <th>قیمت</th>
-        <th>قیمت</th>
-        <th>حجم</th>
+        <th style='clear:center; text-align:center; background-color:rgba(197, 197, 245, 0.5); color: black'>حجم</th>
+        <th style='clear:center; text-align:center; background-color:rgba(197, 197, 245, 0.5); color: black'>قیمت</th>
+        <th style='clear:center; text-align:center; background-color:rgba(255, 188, 188, 0.6); color: black'>قیمت</th>
+        <th style='clear:center; text-align:center; background-color:rgba(255, 188, 188, 0.6); color: black'>حجم</th>
         <th>اندازه قرارداد</th>
         <th>سر رسید</th>
         <th>قیمت اعمال</th>
+        <th>اختلاف قیمت</th>
         <th>قیمت مبنا</th>
+        <th>درصد اختلاف</th>
       </tr>
     </thead>
     <tbody></tbody>

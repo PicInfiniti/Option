@@ -46,6 +46,10 @@
       border: 1px solid #ddd;
       margin-bottom: 12px;
     }
+
+    #option tbody tr:hover{
+      background-color: rgba(250, 250, 96, 0.603);
+    }
   </style>
   <script type="module" src="./main.js" defer></script>
 </head>
@@ -55,6 +59,7 @@
   <table style="width:100%" id='option'>
     <thead>
       <tr>
+        <th name="count">#</th>
         <th style="display: none" name="darayi">parent</th>
         <th name="namad">نماد</th>
         <th name="name">نام</th>
@@ -74,6 +79,8 @@
         <th name="ekh">اختلاف قیمت</th>
         <th name="gh_s_p">قیمت مبنا</th>
         <th name="percent">درصد اختلاف</th>
+        <th name="ghe+ba_gh">اعمال + قیمت</th>
+        <th name="p_profit">بازده</th>
       </tr>
     </thead>
     <tbody></tbody>

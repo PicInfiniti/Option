@@ -3,6 +3,7 @@ import requests, json, time
 
 from pymongo import MongoClient
 
+taxes = 1.012512
 
 def int2base(x, base):
   digs = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
@@ -36,6 +37,10 @@ tsetmc = MongoClient("mongodb://localhost/")["tsetmc"]
 OPTION = tsetmc.option
 
 
+def number(a):
+  a = a.replace(',', '').replace('.', '').replace(' M', '00000').replace(' B', '00000000')
+  return int(a)
+
 
 def Simplify(Data):
   for i in Data:
@@ -43,13 +48,17 @@ def Simplify(Data):
       j['t']: j['v']
       for j in i['val']
     }
-    i['val']['ekh'] = int(i['val']['gh_s_p'].replace(',',''))-int(i['val']['ghe'].replace(',',''))
-    i['val']['percent'] = round(i['val']['ekh'] / int(i['val']['gh_s_p'].replace(',',''))*100, 2)
+    i['val']['ekh'] = number(i['val']['gh_s_p']) - number(i['val']['ghe'])
+    i['val']['percent'] = round(i['val']['ekh'] / number(i['val']['gh_s_p'])*100, 2)
+    i['val']['ghe+ba_gh'] = round(number(i['val']['ghe'])*taxes) + number(i['val']['ba_gh'])
+    i['val']['ekh_profit'] = number(i['val']['gh_s_p']) - i['val']['ghe+ba_gh']
+    i['val']['p_profit'] = round(i['val']['ekh_profit'] / number(i['val']['gh_s_p'])*100, 2)
     
-    i['val']['percent'] = '{:,}'.format(i['val']['percent'])
     i['val']['ekh'] = '{:,}'.format(i['val']['ekh'])
-
-    
+    i['val']['percent'] = '{:,}'.format(i['val']['percent'])
+    i['val']['ghe+ba_gh'] = '{:,}'.format(i['val']['ghe+ba_gh'])
+    i['val']['ekh_profit'] = '{:,}'.format(i['val']['ekh_profit'])
+    i['val']['p_profit'] = '{:,}'.format(i['val']['p_profit'])
 
   
 if __name__=='__main__':
@@ -63,5 +72,3 @@ if __name__=='__main__':
   
   OPTION.delete_many({})
   OPTION.insert_one(res)
-
-

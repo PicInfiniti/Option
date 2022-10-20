@@ -14,7 +14,7 @@
     table,
     th,
     td {
-      border: 1px solid rgb(41, 41, 41);
+      border: 1px solid rgb(192, 192, 192);
       text-align: right;
     }
 
@@ -23,10 +23,16 @@
       position: relative;
     }
 
+    th{
+      color: white;
+      cursor: pointer;
+      text-align: center;
+    }
+
     #option thead {
       background-color: green;
-      /* position: sticky;
-     // top: 0;*/
+      position: sticky;
+      top: 0;
     }
 
     #Search {
@@ -49,25 +55,25 @@
   <table style="width:100%" id='option'>
     <thead>
       <tr>
-        <th style="display: none">parent</th>
-        <th>نماد</th>
-        <th>نام</th>
-        <th>قیمت تسویه امروز</th>
-        <th>موقعیت های باز</th>
-        <th>حجم</th>
-        <th>ارزش معاملات</th>
-        <th>دفعات معاملات</th>
-        <th>آخرین قیمت</th>
-        <th style='clear:center; text-align:center; background-color:rgba(197, 197, 245, 0.5); color: black'>حجم</th>
-        <th style='clear:center; text-align:center; background-color:rgba(197, 197, 245, 0.5); color: black'>قیمت</th>
-        <th style='clear:center; text-align:center; background-color:rgba(255, 188, 188, 0.6); color: black'>قیمت</th>
-        <th style='clear:center; text-align:center; background-color:rgba(255, 188, 188, 0.6); color: black'>حجم</th>
-        <th>اندازه قرارداد</th>
-        <th>سر رسید</th>
-        <th>قیمت اعمال</th>
-        <th>اختلاف قیمت</th>
-        <th>قیمت مبنا</th>
-        <th>درصد اختلاف</th>
+        <th style="display: none" name="darayi">parent</th>
+        <th name="namad">نماد</th>
+        <th name="name">نام</th>
+        <th name="pghey">قیمت تسویه امروز</th>
+        <th name="mb">موقعیت های باز</th>
+        <th name="hajm">حجم</th>
+        <th name="arzesh">ارزش معاملات</th>
+        <th name="dm">دفعات معاملات</th>
+        <th name="aghey">آخرین قیمت</th>
+        <th name="bt_h" style='clear:center; text-align:center; background-color:rgba(197, 197, 245, 0.5); color: black'>حجم</th>
+        <th name="bt_gh" style='clear:center; text-align:center; background-color:rgba(197, 197, 245, 0.5); color: black'>قیمت</th>
+        <th name="ba_gh" style='clear:center; text-align:center; background-color:rgba(255, 188, 188, 0.6); color: black'>قیمت</th>
+        <th name="ba_h" style='clear:center; text-align:center; background-color:rgba(255, 188, 188, 0.6); color: black'>حجم</th>
+        <th name="ang">اندازه قرارداد</th>
+        <th name="r_b">سر رسید</th>
+        <th name="ghe">قیمت اعمال</th>
+        <th name="ekh">اختلاف قیمت</th>
+        <th name="gh_s_p">قیمت مبنا</th>
+        <th name="percent">درصد اختلاف</th>
       </tr>
     </thead>
     <tbody></tbody>

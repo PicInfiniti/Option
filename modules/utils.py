@@ -40,9 +40,15 @@ OPTION = tsetmc.option
 def Simplify(Data):
   for i in Data:
     i['val'] = {
-      j['t']:j['v']
+      j['t']: j['v']
       for j in i['val']
     }
+    i['val']['ekh'] = int(i['val']['gh_s_p'].replace(',',''))-int(i['val']['ghe'].replace(',',''))
+    i['val']['percent'] = round(i['val']['ekh'] / int(i['val']['gh_s_p'].replace(',',''))*100, 2)
+    
+    i['val']['percent'] = '{:,}'.format(i['val']['percent'])
+    i['val']['ekh'] = '{:,}'.format(i['val']['ekh'])
+
     
 
   

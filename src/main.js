@@ -3,8 +3,33 @@ import $ from "jquery"
 
 
 
-var server = 'http://192.168.1.11:5000/'
-var Data;
+var server = 'http://localhost:5000/'
+var totalData;
+
+var tags = [
+  "aghey",
+  "ang",
+  "arzesh",
+  "ba_gh",
+  "ba_h",
+  "bt_gh",
+  "bt_h",
+  "dm",
+  "ekh",
+  "gh_s_p",
+  "ghe",
+  "ghe+ba_gh",
+  "hajm",
+  "leverage",
+  "mb",
+  "namad",
+  "name",
+  "p_profit",
+  "percent",
+  "pghey",
+  "r_b"
+]
+
 
 var Dir = ['0', 'asc']
 
@@ -15,7 +40,7 @@ $.ajax({
   contentType: "application/json; charset=utf-8",
   dataType: "json",
   success: function (data) {
-    Data = data;
+    totalData = data;
     fillTable(data);
   },
   error: function (errMsg) {
@@ -34,27 +59,25 @@ $('#option tbody').on('click', function (e) {
 
 
 
-$('#Search').keyup(() => {
-  let input = document.getElementById("Search");
-  let filter = input.value.toUpperCase();
-  let table = document.getElementById("option");
-  let tr = table.getElementsByTagName("tr");
-  for (let i = 0; i < tr.length; i++) {
-    let td_0 = tr[i].getElementsByTagName("td")[0];
-    let td_1 = tr[i].getElementsByTagName("td")[1];
-    if (td_0 && td_1) {
-      let txtValue_0 = td_0.textContent || td_0.innerText;
-      let txtValue_1 = td_1.textContent || td_1.innerText;
-      if (txtValue_0.toUpperCase().indexOf(filter) > -1 || txtValue_1.toUpperCase().indexOf(filter) > -1) {
-        tr[i].style.display = "";
-      } else {
-        tr[i].style.display = "none";
-      }
+$('#input input').keyup((event) => {
+  let name = {}
+  for (let i of tags){
+    name[i] = $(`#input [name='${i}'] input`).val()
+  }
+
+  let counter = 1
+  for(let i of totalData.bData){
+    if(Filter(i.val, name)){
+      $(`#${i.i}`).show()
+      console.log($(`#${i.i} td[name='count']`).html(counter++))
+      $(`#${i.i} td[name='count']`).val()
+    } else {
+      $(`#${i.i}`).hide()
     }
   }
 })
 
-$('#option th').click((event) => {
+$('#option .head th').click((event) => {
   let name = event.target.getAttribute('name');
   if (Dir[0] == name) {
     Dir[1] = (Dir[1] == 'asc') ? 'des' : 'asc';
@@ -63,10 +86,11 @@ $('#option th').click((event) => {
     Dir[1] = 'asc'
   }
 
-  if (name != 'count') {
-    Data.bData.sort((a, b) => {
 
-      if (name == 'percent' || name == 'p_profit') {
+  if (name != 'count') {
+    totalData.bData.sort((a, b) => {
+
+      if (name == 'percent' || name == 'p_profit' || name=='leverage') {
         let _a = a.val[name]
         let _b = b.val[name]
 
@@ -95,21 +119,19 @@ $('#option th').click((event) => {
           }
         }
       }
-
-
     })
   }
 
   $('#option tbody').empty()
-  fillTable(Data);
+  fillTable(totalData);
 
 })
 
 function fillTable(data) {
   let counter = 1;
   for (let i of data.bData) {
-    $('<tr></tr>').appendTo('#option tbody').append(`
-    <td>${counter++}</td>
+    $(`<tr id=${i.i}></tr>`).appendTo('#option tbody').append(`
+    <td name="count">${counter++}</td>
     <td style="display: none">${i.darayi}</td>
     <td>${i.val.namad}</td>
     <td>${i.val.name}</td>
@@ -131,29 +153,9 @@ function fillTable(data) {
     <td dir='ltr' style='color:${colorPicker(i.val.percent)}'>${i.val.percent}</td>
     <td dir='ltr' style='color:${Number(number(i.val.gh_s_p))>Number(number(i.val['ghe+ba_gh']))?'green':'red'}'>${i.val['ghe+ba_gh']}</td>
     <td dir='ltr' style='color:${colorPicker(i.val.p_profit)}'>${i.val.p_profit}</td>
+    <td dir='ltr' style='clear:center; text-align:center;'>${i.val.leverage}</td>
     `)
   }
-
-
-
-  let input = document.getElementById("Search");
-  let filter = input.value.toUpperCase();
-  let table = document.getElementById("option");
-  let tr = table.getElementsByTagName("tr");
-  for (let i = 0; i < tr.length; i++) {
-    let td_0 = tr[i].getElementsByTagName("td")[0];
-    let td_1 = tr[i].getElementsByTagName("td")[1];
-    if (td_0 && td_1) {
-      let txtValue_0 = td_0.textContent || td_0.innerText;
-      let txtValue_1 = td_1.textContent || td_1.innerText;
-      if (txtValue_0.toUpperCase().indexOf(filter) > -1 || txtValue_1.toUpperCase().indexOf(filter) > -1) {
-        tr[i].style.display = "";
-      } else {
-        tr[i].style.display = "none";
-      }
-    }
-  }
-
 }
 
 
@@ -191,4 +193,14 @@ function r_bColor(n) {
   } else {
     return 'green'
   }
+}
+
+
+function Filter(val, param){
+  for(let i in param){
+    if(param[i]!="" && !val[i].includes(param[i])){
+      return false
+    }
+  }
+  return true
 }

@@ -23,41 +23,31 @@
       position: relative;
     }
 
-    th{
+    .head th{
       color: white;
       cursor: pointer;
       text-align: center;
     }
 
-    #option thead {
+    .head {
       background-color: green;
       position: sticky;
       top: 0;
     }
 
-    #Search {
-      background-image: url('./assets/icon/search.svg');
-      background-position: 10px 10px;
-      background-repeat: no-repeat;
-      background-size: 25px;
-      width: 100%;
-      font-size: 16px;
-      padding: 12px 20px 12px 40px;
-      border: 1px solid #ddd;
-      margin-bottom: 12px;
-    }
-
     #option tbody tr:hover{
       background-color: rgba(250, 250, 96, 0.603);
+    }
+    #input input{
+      width: 100%;
     }
   </style>
   <script type="module" src="./main.js" defer></script>
 </head>
 
 <body dir="rtl">
-  <input type="text" id="Search" placeholder="جستجو..." title="Type in a name">
   <table style="width:100%" id='option'>
-    <thead>
+    <thead class="head">
       <tr>
         <th name="count">#</th>
         <th style="display: none" name="darayi">parent</th>
@@ -81,6 +71,34 @@
         <th name="percent">درصد اختلاف</th>
         <th name="ghe+ba_gh">اعمال + قیمت</th>
         <th name="p_profit">بازده</th>
+        <th name="leverage">اهرم</th>
+      </tr>
+    </thead>
+    <thead id="input">
+      <tr>
+        <th name="count"></th>
+        <th style="display: none" name="darayi"><input type="text"></th>
+        <th name="namad"><input type="text"></th>
+        <th name="name"><input type="text"></th>
+        <th name="pghey"><input type="text"></th>
+        <th name="mb"><input type="text"></th>
+        <th name="hajm"><input type="text"></th>
+        <th name="arzesh"><input type="text"></th>
+        <th name="dm"><input type="text"></th>
+        <th name="aghey"><input type="text"></th>
+        <th name="bt_h" style='clear:center; text-align:center; background-color:rgba(197, 197, 245, 0.5); color: black'><input type="text"></th>
+        <th name="bt_gh" style='clear:center; text-align:center; background-color:rgba(197, 197, 245, 0.5); color: black'><input type="text"></th>
+        <th name="ba_gh" style='clear:center; text-align:center; background-color:rgba(255, 188, 188, 0.6); color: black'><input type="text"></th>
+        <th name="ba_h" style='clear:center; text-align:center; background-color:rgba(255, 188, 188, 0.6); color: black'><input type="text"></th>
+        <th name="ang"><input type="text"></th>
+        <th name="r_b"><input type="text"></th>
+        <th name="ghe"><input type="text"></th>
+        <th name="ekh"><input type="text"></th>
+        <th name="gh_s_p"><input type="text"></th>
+        <th name="percent"><input type="text"></th>
+        <th name="ghe+ba_gh"><input type="text"></th>
+        <th name="p_profit"><input type="text"></th>
+        <th name="leverage"><input type="text"></th>
       </tr>
     </thead>
     <tbody></tbody>

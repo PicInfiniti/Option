@@ -61,16 +61,15 @@ $('#option tbody').on('click', function (e) {
 
 $('#input input').keyup((event) => {
   let name = {}
-  for (let i of tags){
+  for (let i of tags) {
     name[i] = $(`#input [name='${i}'] input`).val()
   }
 
   let counter = 1
-  for(let i of totalData.bData){
-    if(Filter(i.val, name)){
+  for (let i of totalData.bData) {
+    if (Filter(i.val, name)) {
       $(`#${i.i}`).show()
-      console.log($(`#${i.i} td[name='count']`).html(counter++))
-      $(`#${i.i} td[name='count']`).val()
+      $(`#${i.i} td[name='count']`).html(counter++)
     } else {
       $(`#${i.i}`).hide()
     }
@@ -90,7 +89,7 @@ $('#option .head th').click((event) => {
   if (name != 'count') {
     totalData.bData.sort((a, b) => {
 
-      if (name == 'percent' || name == 'p_profit' || name=='leverage') {
+      if (name == 'percent' || name == 'p_profit' || name == 'leverage') {
         let _a = a.val[name]
         let _b = b.val[name]
 
@@ -156,14 +155,32 @@ function fillTable(data) {
     <td dir='ltr' style='clear:center; text-align:center;'>${i.val.leverage}</td>
     `)
   }
+
+  let name = {}
+  for (let i of tags) {
+    name[i] = $(`#input [name='${i}'] input`).val()
+  }
+
+  counter = 1
+  for (let i of totalData.bData) {
+    if (Filter(i.val, name)) {
+      $(`#${i.i}`).show()
+      $(`#${i.i} td[name='count']`).html(counter++)
+    } else {
+      $(`#${i.i}`).hide()
+    }
+  }
 }
 
 
 function number(a) {
   let _a = a.replaceAll(',', '')
-  _a = _a.replace('.', '')
-  _a = _a.replace(' M', '00000')
-  _a = _a.replace(' B', '00000000')
+  if (a.includes('M') || a.includes('B')){
+    _a = _a.replace('.', '')
+    _a = _a.replace(' M', '00000')
+    _a = _a.replace(' B', '00000000')
+  }
+
 
   return _a
 }
@@ -196,10 +213,64 @@ function r_bColor(n) {
 }
 
 
-function Filter(val, param){
-  for(let i in param){
-    if(param[i]!="" && !val[i].includes(param[i])){
-      return false
+function Filter(val, param) {
+  for (let i in param) {
+    if (param[i] != "") {
+      if (i == 'name' || i == 'namad') {
+        if (!val[i].includes(param[i])) {
+          return false;
+        }
+      } else {
+        let tmp = param[i].split(' ')
+        if (tmp.length == 1) {
+          if (Number(number(val[i])) != param[i]) {
+            return false;
+          }
+        } else {
+          tmp[1] = Number(tmp[1]);
+          switch (tmp[0]) {
+            case '=':
+              if (Number(number(val[i])) != tmp[1]) {
+                return false;
+              }
+              break;
+
+            case '!=':
+              if (Number(number(val[i])) == tmp[1]) {
+                return false;
+              }
+              break;
+
+            case '>':
+              if (Number(number(val[i])) <= tmp[1]) {
+                return false;
+              }
+              break;
+
+            case '<':
+              if (Number(number(val[i])) >= tmp[1]) {
+                return false;
+              }
+              break;
+
+            case '>=':
+              if (Number(number(val[i])) < tmp[1]) {
+                return false;
+              }
+              break;
+
+            case '<=':
+              if (Number(number(val[i])) > tmp[1]) {
+                return false;
+              }
+              break;
+
+            default:
+              return false
+          }
+        }
+      }
+
     }
   }
   return true

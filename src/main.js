@@ -1,12 +1,27 @@
 import $ from "jquery"
-// import './assets/css/style.css'
+import './assets/sass/style.sass'
 
 
 
 var server = 'http://localhost:5000/'
 var totalData;
 
-var tags = [
+var Option = 'Call'
+
+if(window.location.pathname.includes('put')){
+  $('#callOption').css({display: 'none'})
+  Option='Put'
+} else {
+  if(!window.location.pathname.includes('call')){
+    window.location.pathname = '/call'
+  }
+  $('#putOption').css({display: 'none'})
+  Option='Call'
+}
+
+
+
+var callTags = [
   "aghey",
   "ang",
   "arzesh",
@@ -30,6 +45,25 @@ var tags = [
   "r_b"
 ]
 
+var putTags = [
+  "ang",
+  "fo_aghey",
+  "fo_arzesh",
+  "fo_ba_gh",
+  "fo_ba_h",
+  "fo_bt_gh",
+  "fo_bt_h",
+  "fo_dm",
+  "fo_hajm",
+  "fo_mb",
+  "fo_namad",
+  "fo_name",
+  "fo_pghey",
+  "gh_s_p",
+  "ghe",
+  "ghe+ba_gh",
+  "r_b"
+]
 
 var Dir = ['0', 'asc']
 
@@ -41,14 +75,30 @@ $.ajax({
   dataType: "json",
   success: function (data) {
     totalData = data;
-    fillTable(data);
+
+    let tmp = []
+    for (let i in data.bData[0].val){
+      tmp.push(i)
+    }
+    console.log(data.bData[0])
+
+    if (Option=='Call'){
+      fillTableCall(data);
+    } else if (Option=='Put'){
+      fillTablePut(data)
+    } else {
+      fillTableCall(data);
+      fillTablePut(data)
+    }
+    
+    
   },
   error: function (errMsg) {
     console.log(errMsg);
   }
 });
 
-$('#option tbody').on('click', function (e) {
+$('#callOption tbody').on('click', function (e) {
   $('tr').css({
     'background-color': ''
   })
@@ -57,11 +107,9 @@ $('#option tbody').on('click', function (e) {
   })
 })
 
-
-
-$('#input input').keyup((event) => {
+$('#callOption #input input').keyup((event) => {
   let name = {}
-  for (let i of tags) {
+  for (let i of callTags) {
     name[i] = $(`#input [name='${i}'] input`).val()
   }
 
@@ -76,7 +124,7 @@ $('#input input').keyup((event) => {
   }
 })
 
-$('#option .head th').click((event) => {
+$('#callOption .head th').click((event) => {
   let name = event.target.getAttribute('name');
   if (Dir[0] == name) {
     Dir[1] = (Dir[1] == 'asc') ? 'des' : 'asc';
@@ -121,15 +169,100 @@ $('#option .head th').click((event) => {
     })
   }
 
-  $('#option tbody').empty()
-  fillTable(totalData);
+  $('#callOption tbody').empty()
+  fillTableCall(totalData);
 
 })
 
-function fillTable(data) {
+
+
+$('#putOption tbody').on('click', function (e) {
+  $('tr').css({
+    'background-color': ''
+  })
+  $(e.target).closest('tr').css({
+    'background-color': 'rgba(250, 250, 96, 0.603)'
+  })
+})
+
+$('#putOption #input input').keyup((event) => {
+  
+  let name = {}
+  for (let i of putTags) {
+    name[i] = $(`#putOption #input [name='${i}'] input`).val()
+  }
+
+  let counter = 1
+  for (let i of totalData.bData) {
+    if (Filter(i.val, name)) {
+      $(`#${i.i2}`).show()
+      $(`#${i.i2} td[name='count']`).html(counter++)
+    } else {
+      $(`#${i.i2}`).hide()
+    }
+  }
+})
+
+$('#putOption .head th').click((event) => {
+  let name = event.target.getAttribute('name');
+  if (Dir[0] == name) {
+    Dir[1] = (Dir[1] == 'asc') ? 'des' : 'asc';
+  } else {
+    Dir[0] = name
+    Dir[1] = 'asc'
+  }
+
+
+  if (name != 'count') {
+    totalData.bData.sort((a, b) => {
+
+      if (name == 'percent' || name == 'p_profit' || name == 'leverage') {
+        let _a = a.val[name]
+        let _b = b.val[name]
+
+        if (Dir[1] == 'asc') {
+          return Number(_a) < Number(_b)
+        } else {
+          return Number(_a) > Number(_b)
+        }
+
+      } else {
+        let _a = number(a.val[name])
+        let _b = number(b.val[name])
+
+        if (isNaN(Number(_a))) {
+          if (Dir[1] == 'asc') {
+            return _a < _b
+          } else {
+            return _a > _b
+          }
+
+        } else {
+          if (Dir[1] == 'asc') {
+            return Number(_a) < Number(_b)
+          } else {
+            return Number(_a) > Number(_b)
+          }
+        }
+      }
+    })
+  }
+
+  $('#putOption tbody').empty()
+  fillTablePut(totalData);
+
+})
+
+
+
+
+
+
+
+function fillTableCall(data) {
   let counter = 1;
   for (let i of data.bData) {
-    $(`<tr id=${i.i}></tr>`).appendTo('#option tbody').append(`
+    $(`<tr id=${i.i}></tr>`).appendTo('#callOption tbody').append(`
     <td name="count">${counter++}</td>
     <td style="display: none">${i.darayi}</td>
     <td>${i.val.namad}</td>
@@ -157,8 +290,8 @@ function fillTable(data) {
   }
 
   let name = {}
-  for (let i of tags) {
-    name[i] = $(`#input [name='${i}'] input`).val()
+  for (let i of callTags) {
+    name[i] = $(`#callOption #input [name='${i}'] input`).val()
   }
 
   counter = 1
@@ -168,6 +301,52 @@ function fillTable(data) {
       $(`#${i.i} td[name='count']`).html(counter++)
     } else {
       $(`#${i.i}`).hide()
+    }
+  }
+}
+
+function fillTablePut(data) {
+  let counter = 1;
+  for (let i of data.bData) {
+    $(`<tr id=${i.i2}></tr>`).appendTo('#putOption tbody').append(`
+    <td name="count">${counter++}</td>
+    <td style="display: none">${i.darayi}</td>
+    <td>${i.val.fo_namad}</td>
+    <td>${i.val.fo_name}</td>
+    <td dir='ltr'>${i.val.fo_pghey}</td>
+    <td dir='ltr'>${i.val.fo_mb==null || i.val.fo_mb=='' ? 0 : i.val.fo_mb}</td>
+    <td dir='ltr'>${i.val.fo_hajm}</td>
+    <td dir='ltr'>${i.val.fo_arzesh}</td>
+    <td dir='ltr'>${i.val.fo_dm}</td>
+    <td dir='ltr'>${i.val.fo_aghey}</td>
+    <td dir='ltr' style='clear:center; text-align:center; background-color:rgba(197, 197, 245, 0.5); color: black'>${i.val.fo_bt_h}</td>
+    <td dir='ltr' style='clear:center; text-align:center; background-color:rgba(197, 197, 245, 0.5); color: black'>${i.val.fo_bt_gh}</td>
+    <td dir='ltr' style='clear:center; text-align:center; background-color:rgba(255, 188, 188, 0.6); color: black'>${i.val.fo_ba_gh}</td>
+    <td dir='ltr' style='clear:center; text-align:center; background-color:rgba(255, 188, 188, 0.6); color: black'>${i.val.fo_ba_h}</td>
+    <td dir='ltr'>${i.val.ang}</td>
+    <td dir='ltr' style='color:${r_bColor(i.val.r_b)}'>${i.val.r_b}</td>
+    <td dir='ltr'>${i.val.ghe}</td>
+    <td dir='ltr' style='color:${colorPicker(i.val.ekh)}'>${i.val.ekh}</td>
+    <td dir='ltr'>${i.val.gh_s_p}</td>
+    <td dir='ltr' style='color:${colorPicker(i.val.percent)}'>${i.val.percent}</td>
+    <td dir='ltr' style='color:${Number(number(i.val.gh_s_p))>Number(number(i.val['ghe+ba_gh']))?'green':'red'}'>${i.val['ghe+ba_gh']}</td>
+    <td dir='ltr' style='color:${colorPicker(i.val.p_profit)}'>${i.val.p_profit}</td>
+    <td dir='ltr' style='clear:center; text-align:center;'>${i.val.leverage}</td>
+    `)
+  }
+
+  let name = {}
+  for (let i of putTags) {
+    name[i] = $(`#putOption #input [name='${i}'] input`).val()
+  }
+
+  counter = 1
+  for (let i of totalData.bData) {
+    if (Filter(i.val, name)) {
+      $(`#${i.i2}`).show()
+      $(`#${i.i2} td[name='count']`).html(counter++)
+    } else {
+      $(`#${i.i2}`).hide()
     }
   }
 }
@@ -216,7 +395,7 @@ function r_bColor(n) {
 function Filter(val, param) {
   for (let i in param) {
     if (param[i] != "") {
-      if (i == 'name' || i == 'namad') {
+      if (i == 'name' || i == 'namad' || i == 'fo_name' || i == 'fo_namad') {
         if (!val[i].includes(param[i])) {
           return false;
         }

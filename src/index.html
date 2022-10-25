@@ -6,47 +6,12 @@
   <link rel="icon" type="image/svg+xml" href="./vite.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Vite App</title>
-  <style>
-    * {
-      box-sizing: border-box;
-    }
 
-    table,
-    th,
-    td {
-      border: 1px solid rgb(192, 192, 192);
-      text-align: right;
-    }
-
-    table {
-      text-align: left;
-      position: relative;
-    }
-
-    .head th{
-      color: white;
-      cursor: pointer;
-      text-align: center;
-    }
-
-    .head {
-      background-color: green;
-      position: sticky;
-      top: 0;
-    }
-
-    #option tbody tr:hover{
-      background-color: rgba(250, 250, 96, 0.603);
-    }
-    #input input{
-      width: 100%;
-    }
-  </style>
   <script type="module" src="./main.js" defer></script>
 </head>
 
 <body dir="rtl">
-  <table style="width:100%" id='option'>
+  <table style="width:100%" id='callOption'>
     <thead class="head">
       <tr>
         <th name="count">#</th>
@@ -90,6 +55,64 @@
         <th name="bt_gh" style='clear:center; text-align:center; background-color:rgba(197, 197, 245, 0.5); color: black'><input type="text" dir="ltr"></th>
         <th name="ba_gh" style='clear:center; text-align:center; background-color:rgba(255, 188, 188, 0.6); color: black'><input type="text" dir="ltr"></th>
         <th name="ba_h" style='clear:center; text-align:center; background-color:rgba(255, 188, 188, 0.6); color: black'><input type="text" dir="ltr"></th>
+        <th name="ang"><input type="text" dir="ltr"></th>
+        <th name="r_b"><input type="text" dir="ltr"></th>
+        <th name="ghe"><input type="text" dir="ltr"></th>
+        <th name="ekh"><input type="text" dir="ltr"></th>
+        <th name="gh_s_p"><input type="text" dir="ltr"></th>
+        <th name="percent"><input type="text" dir="ltr"></th>
+        <th name="ghe+ba_gh"><input type="text" dir="ltr"></th>
+        <th name="p_profit"><input type="text" dir="ltr"></th>
+        <th name="leverage"><input type="text" dir="ltr"></th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+  
+  <table style="width:100%" id='putOption'>
+    <thead class="head">
+      <tr>
+        <th name="count">#</th>
+        <th style="display: none" name="darayi">parent</th>
+        <th name="fo_namad">نماد</th>
+        <th name="fo_name">نام</th>
+        <th name="fo_pghey">قیمت تسویه امروز</th>
+        <th name="fo_mb">موقعیت های باز</th>
+        <th name="fo_hajm">حجم</th>
+        <th name="fo_arzesh">ارزش معاملات</th>
+        <th name="fo_dm">دفعات معاملات</th>
+        <th name="fo_aghey">آخرین قیمت</th>
+        <th name="fo_bt_h" style='clear:center; text-align:center; background-color:rgba(197, 197, 245, 0.5); color: black'>حجم</th>
+        <th name="fo_bt_gh" style='clear:center; text-align:center; background-color:rgba(197, 197, 245, 0.5); color: black'>قیمت</th>
+        <th name="fo_ba_gh" style='clear:center; text-align:center; background-color:rgba(255, 188, 188, 0.6); color: black'>قیمت</th>
+        <th name="fo_ba_h" style='clear:center; text-align:center; background-color:rgba(255, 188, 188, 0.6); color: black'>حجم</th>
+        <th name="ang">اندازه قرارداد</th>
+        <th name="r_b">سر رسید</th>
+        <th name="ghe">قیمت اعمال</th>
+        <th name="ekh">اختلاف قیمت</th>
+        <th name="gh_s_p">قیمت مبنا</th>
+        <th name="percent">درصد اختلاف</th>
+        <th name="ghe+ba_gh">اعمال + قیمت</th>
+        <th name="p_profit">بازده</th>
+        <th name="leverage">اهرم</th>
+      </tr>
+    </thead>
+    <thead id="input">
+      <tr>
+        <th name="count"></th>
+        <th style="display: none" name="darayi"><input type="text" dir="ltr"></th>
+        <th name="fo_namad"><input type="text"></th>
+        <th name="fo_name"><input type="text"></th>
+        <th name="fo_pghey"><input type="text" dir="ltr"></th>
+        <th name="fo_mb"><input type="text" dir="ltr"></th>
+        <th name="fo_hajm"><input type="text" dir="ltr"></th>
+        <th name="fo_arzesh"><input type="text" dir="ltr"></th>
+        <th name="fo_dm"><input type="text" dir="ltr"></th>
+        <th name="fo_aghey"><input type="text" dir="ltr"></th>
+        <th name="fo_bt_h" style='clear:center; text-align:center; background-color:rgba(197, 197, 245, 0.5); color: black'><input type="text" dir="ltr"></th>
+        <th name="fo_bt_gh" style='clear:center; text-align:center; background-color:rgba(197, 197, 245, 0.5); color: black'><input type="text" dir="ltr"></th>
+        <th name="fo_ba_gh" style='clear:center; text-align:center; background-color:rgba(255, 188, 188, 0.6); color: black'><input type="text" dir="ltr"></th>
+        <th name="fo_ba_h" style='clear:center; text-align:center; background-color:rgba(255, 188, 188, 0.6); color: black'><input type="text" dir="ltr"></th>
         <th name="ang"><input type="text" dir="ltr"></th>
         <th name="r_b"><input type="text" dir="ltr"></th>
         <th name="ghe"><input type="text" dir="ltr"></th>

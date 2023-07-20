@@ -8,6 +8,41 @@
   <title>Vite App</title>
 
   <script type="module" src="./main.js" defer></script>
+  <style>
+    .head tr th {
+      position: relative;
+    }
+
+    .tooltiptext {
+      visibility: hidden;
+      width: 120px;
+      background-color: black;
+      color: #fff;
+      text-align: center;
+      border-radius: 6px;
+      padding: 5px 0;
+      position: absolute;
+      z-index: 1;
+      top: 100%;
+      left: 50%;
+      margin-left: -60px;
+    }
+
+    .tooltiptext::after {
+      content: "";
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      margin-left: -5px;
+      border-width: 5px;
+      border-style: solid;
+      border-color: transparent transparent black transparent;
+    }
+
+    .head tr th:hover .tooltiptext {
+      visibility: visible;
+    }
+  </style>
 </head>
 
 <body dir="rtl">
@@ -15,26 +50,28 @@
     <thead class="head">
       <tr>
         <th name="count">#</th>
-        <th style="display: none" name="darayi">parent</th>
-        <th name="namad">نماد</th>
-        <th name="name">نام</th>
-        <th name="pghey">قیمت تسویه امروز</th>
-        <th name="mb">موقعیت های باز</th>
-        <th name="hajm">حجم</th>
-        <th name="arzesh">ارزش معاملات</th>
-        <th name="dm">دفعات معاملات</th>
-        <th name="aghey">آخرین قیمت</th>
-        <th name="bt_h" style='clear:center; text-align:center; background-color:rgba(197, 197, 245, 0.5); color: black'>حجم</th>
-        <th name="bt_gh" style='clear:center; text-align:center; background-color:rgba(197, 197, 245, 0.5); color: black'>قیمت</th>
-        <th name="ba_gh" style='clear:center; text-align:center; background-color:rgba(255, 188, 188, 0.6); color: black'>قیمت</th>
-        <th name="ba_h" style='clear:center; text-align:center; background-color:rgba(255, 188, 188, 0.6); color: black'>حجم</th>
-        <th name="ang">اندازه قرارداد</th>
-        <th name="r_b">سر رسید</th>
-        <th name="ghe">قیمت اعمال</th>
+        <th name="instrumentName" class="tooltip">نماد<span class="tooltiptext">Tooltip text</span></th>
+        <th name="companyNamePersian">نام</th>
+        <th name="closingPrice">قیمت تسویه امروز</th>
+        <th name="moqeyateBaz">موقعیت های باز</th>
+        <th name="tradeVolume">حجم</th>
+        <th name="tradeValue">ارزش معاملات</th>
+        <th name="lastPrice">آخرین قیمت</th>
+        <th name="buyQuantity"
+          style='clear:center; text-align:center; background-color:rgba(197, 197, 245, 0.5); color: black'>حجم</th>
+        <th name="buyBuyPrice"
+          style='clear:center; text-align:center; background-color:rgba(197, 197, 245, 0.5); color: black'>قیمت</th>
+        <th name="sellBuyPrice"
+          style='clear:center; text-align:center; background-color:rgba(255, 188, 188, 0.6); color: black'>قیمت</th>
+        <th name="sellBuyQuantity"
+          style='clear:center; text-align:center; background-color:rgba(255, 188, 188, 0.6); color: black'>حجم</th>
+        <th name="andazeQarardad">اندازه قرارداد</th>
+        <th name="baghimandeTaSarresid">سر رسید<span class="tooltiptext">روزهای باقی مانده تا سر رسید قرارداد</span></th>
+        <th name="qeymateEmal">قیمت اعمال</th>
         <th name="ekh">اختلاف قیمت</th>
-        <th name="gh_s_p">قیمت مبنا</th>
+        <th name="qeymateMabna">قیمت مبنا</th>
         <th name="percent">درصد اختلاف</th>
-        <th name="ghe+ba_gh">اعمال + قیمت</th>
+        <th name="ghe+sellBuyPrice">اعمال + قیمت</th>
         <th name="p_profit">بازده</th>
         <th name="leverage">اهرم</th>
       </tr>
@@ -42,55 +79,64 @@
     <thead id="input">
       <tr>
         <th name="count"></th>
-        <th style="display: none" name="darayi"><input type="text" dir="ltr"></th>
-        <th name="namad"><input type="text"></th>
-        <th name="name"><input type="text"></th>
-        <th name="pghey"><input type="text" dir="ltr"></th>
-        <th name="mb"><input type="text" dir="ltr"></th>
-        <th name="hajm"><input type="text" dir="ltr"></th>
-        <th name="arzesh"><input type="text" dir="ltr"></th>
-        <th name="dm"><input type="text" dir="ltr"></th>
-        <th name="aghey"><input type="text" dir="ltr"></th>
-        <th name="bt_h" style='clear:center; text-align:center; background-color:rgba(197, 197, 245, 0.5); color: black'><input type="text" dir="ltr"></th>
-        <th name="bt_gh" style='clear:center; text-align:center; background-color:rgba(197, 197, 245, 0.5); color: black'><input type="text" dir="ltr"></th>
-        <th name="ba_gh" style='clear:center; text-align:center; background-color:rgba(255, 188, 188, 0.6); color: black'><input type="text" dir="ltr"></th>
-        <th name="ba_h" style='clear:center; text-align:center; background-color:rgba(255, 188, 188, 0.6); color: black'><input type="text" dir="ltr"></th>
-        <th name="ang"><input type="text" dir="ltr"></th>
-        <th name="r_b"><input type="text" dir="ltr"></th>
-        <th name="ghe"><input type="text" dir="ltr"></th>
+        <th name="instrumentName"><input type="text"></th>
+        <th name="companyNamePersian"><input type="text"></th>
+        <th name="closingPrice"><input type="text" dir="ltr"></th>
+        <th name="moqeyateBaz"><input type="text" dir="ltr"></th>
+        <th name="tradeVolume"><input type="text" dir="ltr"></th>
+        <th name="tradeValue"><input type="text" dir="ltr"></th>
+        <th name="lastPrice"><input type="text" dir="ltr"></th>
+        <th name="buyQuantity"
+          style='clear:center; text-align:center; background-color:rgba(197, 197, 245, 0.5); color: black'><input
+            type="text" dir="ltr"></th>
+        <th name="buyBuyPrice"
+          style='clear:center; text-align:center; background-color:rgba(197, 197, 245, 0.5); color: black'><input
+            type="text" dir="ltr"></th>
+        <th name="sellBuyPrice"
+          style='clear:center; text-align:center; background-color:rgba(255, 188, 188, 0.6); color: black'><input
+            type="text" dir="ltr"></th>
+        <th name="sellBuyQuantity"
+          style='clear:center; text-align:center; background-color:rgba(255, 188, 188, 0.6); color: black'><input
+            type="text" dir="ltr"></th>
+        <th name="andazeQarardad"><input type="text" dir="ltr"></th>
+        <th name="baghimandeTaSarresid"><input type="text" dir="ltr"></th>
+        <th name="qeymateEmal"><input type="text" dir="ltr"></th>
         <th name="ekh"><input type="text" dir="ltr"></th>
-        <th name="gh_s_p"><input type="text" dir="ltr"></th>
+        <th name="qeymateMabna"><input type="text" dir="ltr"></th>
         <th name="percent"><input type="text" dir="ltr"></th>
-        <th name="ghe+ba_gh"><input type="text" dir="ltr"></th>
+        <th name="ghe+sellBuyPrice"><input type="text" dir="ltr"></th>
         <th name="p_profit"><input type="text" dir="ltr"></th>
         <th name="leverage"><input type="text" dir="ltr"></th>
       </tr>
     </thead>
     <tbody></tbody>
   </table>
-  
+
   <table style="width:100%" id='putOption'>
     <thead class="head">
       <tr>
         <th name="count">#</th>
-        <th style="display: none" name="darayi">parent</th>
-        <th name="fo_namad">نماد</th>
-        <th name="fo_name">نام</th>
-        <th name="fo_pghey">قیمت تسویه امروز</th>
-        <th name="fo_mb">موقعیت های باز</th>
-        <th name="fo_hajm">حجم</th>
-        <th name="fo_arzesh">ارزش معاملات</th>
-        <th name="fo_dm">دفعات معاملات</th>
-        <th name="fo_aghey">آخرین قیمت</th>
-        <th name="fo_bt_h" style='clear:center; text-align:center; background-color:rgba(197, 197, 245, 0.5); color: black'>حجم</th>
-        <th name="fo_bt_gh" style='clear:center; text-align:center; background-color:rgba(197, 197, 245, 0.5); color: black'>قیمت</th>
-        <th name="fo_ba_gh" style='clear:center; text-align:center; background-color:rgba(255, 188, 188, 0.6); color: black'>قیمت</th>
-        <th name="fo_ba_h" style='clear:center; text-align:center; background-color:rgba(255, 188, 188, 0.6); color: black'>حجم</th>
-        <th name="ang">اندازه قرارداد</th>
-        <th name="r_b">سر رسید</th>
-        <th name="ghe">قیمت اعمال</th>
+        <th name="sellInstrumentName">نماد</th>
+        <th name="sellCompanyNamePersian">نام</th>
+        <th name="sellClosingPrice">قیمت تسویه امروز</th>
+        <th name="sellMoqeyathayeBaz">موقعیت های باز</th>
+        <th name="sellTradeVolume">حجم</th>
+        <th name="sellTradeValue">ارزش معاملات</th>
+        <!-- <th name="fo_dm">دفعات معاملات</th> -->
+        <th name="sellLastPrice">آخرین قیمت</th>
+        <th name="sellBuyQuantity"
+          style='clear:center; text-align:center; background-color:rgba(197, 197, 245, 0.5); color: black'>حجم</th>
+        <th name="sellBuyPrice"
+          style='clear:center; text-align:center; background-color:rgba(197, 197, 245, 0.5); color: black'>قیمت</th>
+        <th name="tradeVolume_2"
+          style='clear:center; text-align:center; background-color:rgba(255, 188, 188, 0.6); color: black'>قیمت</th>
+        <th name="tradeVolume_1"
+          style='clear:center; text-align:center; background-color:rgba(255, 188, 188, 0.6); color: black'>حجم</th>
+        <th name="andazeQarardad">اندازه قرارداد</th>
+        <th name="baghimandeTaSarresid">سر رسید</th>
+        <th name="qeymateEmal">قیمت اعمال</th>
         <th name="ekh">اختلاف قیمت</th>
-        <th name="gh_s_p">قیمت مبنا</th>
+        <th name="qeymateMabna">قیمت مبنا</th>
         <th name="percent">درصد اختلاف</th>
         <th name="ghe+ba_gh">اعمال + قیمت</th>
         <th name="p_profit">بازده</th>
@@ -100,19 +146,26 @@
     <thead id="input">
       <tr>
         <th name="count"></th>
-        <th style="display: none" name="darayi"><input type="text" dir="ltr"></th>
         <th name="fo_namad"><input type="text"></th>
         <th name="fo_name"><input type="text"></th>
         <th name="fo_pghey"><input type="text" dir="ltr"></th>
         <th name="fo_mb"><input type="text" dir="ltr"></th>
         <th name="fo_hajm"><input type="text" dir="ltr"></th>
         <th name="fo_arzesh"><input type="text" dir="ltr"></th>
-        <th name="fo_dm"><input type="text" dir="ltr"></th>
+        <!-- <th name="fo_dm"><input type="text" dir="ltr"></th> -->
         <th name="fo_aghey"><input type="text" dir="ltr"></th>
-        <th name="fo_bt_h" style='clear:center; text-align:center; background-color:rgba(197, 197, 245, 0.5); color: black'><input type="text" dir="ltr"></th>
-        <th name="fo_bt_gh" style='clear:center; text-align:center; background-color:rgba(197, 197, 245, 0.5); color: black'><input type="text" dir="ltr"></th>
-        <th name="fo_ba_gh" style='clear:center; text-align:center; background-color:rgba(255, 188, 188, 0.6); color: black'><input type="text" dir="ltr"></th>
-        <th name="fo_ba_h" style='clear:center; text-align:center; background-color:rgba(255, 188, 188, 0.6); color: black'><input type="text" dir="ltr"></th>
+        <th name="fo_bt_h"
+          style='clear:center; text-align:center; background-color:rgba(197, 197, 245, 0.5); color: black'><input
+            type="text" dir="ltr"></th>
+        <th name="fo_bt_gh"
+          style='clear:center; text-align:center; background-color:rgba(197, 197, 245, 0.5); color: black'><input
+            type="text" dir="ltr"></th>
+        <th name="fo_ba_gh"
+          style='clear:center; text-align:center; background-color:rgba(255, 188, 188, 0.6); color: black'><input
+            type="text" dir="ltr"></th>
+        <th name="fo_ba_h"
+          style='clear:center; text-align:center; background-color:rgba(255, 188, 188, 0.6); color: black'><input
+            type="text" dir="ltr"></th>
         <th name="ang"><input type="text" dir="ltr"></th>
         <th name="r_b"><input type="text" dir="ltr"></th>
         <th name="ghe"><input type="text" dir="ltr"></th>

@@ -1,48 +1,56 @@
 import $ from "jquery"
 import './assets/sass/style.sass'
 
-
-
-var server = 'http://localhost:5000/'
-var totalData;
+import totalData from './data.json';
 
 var Option = 'Call'
 
-if(window.location.pathname.includes('put')){
-  $('#callOption').css({display: 'none'})
-  Option='Put'
+if (window.location.pathname.includes('put')) {
+  $('#callOption').css({
+    display: 'none'
+  })
+  Option = 'Put'
 } else {
-  if(!window.location.pathname.includes('call')){
+  if (!window.location.pathname.includes('call')) {
     window.location.pathname = '/call'
   }
-  $('#putOption').css({display: 'none'})
-  Option='Call'
+  $('#putOption').css({
+    display: 'none'
+  })
+  Option = 'Call'
 }
 
-
-
 var callTags = [
-  "aghey",
-  "ang",
-  "arzesh",
-  "ba_gh",
-  "ba_h",
-  "bt_gh",
-  "bt_h",
-  "dm",
+  "instrumentName",
+  "companyNamePersian",
+  "closingPrice",
+  "moqeyateBaz",
+  "tradeVolume",
+  "tradeValue",
+  "lastPrice",
+  "buyQuantity",
+  "buyBuyPrice",
+  "sellBuyPrice",
+  "sellBuyQuantity",
+  "andazeQarardad",
+  "baghimandeTaSarresid",
+  "qeymateEmal",
+  "qeymateMabna",
+  "sellInstrumentName",
+  "sellCompanyNamePersian",
+  "sellClosingPrice",
+  "sellMoqeyathayeBaz",
+  "sellTradeVolume",
+  "sellTradeValue",
+  "sellLastPrice",
+  "sellSellPrice",
+  "sellSellQuantity",
   "ekh",
-  "gh_s_p",
-  "ghe",
-  "ghe+ba_gh",
-  "hajm",
-  "leverage",
-  "mb",
-  "namad",
-  "name",
-  "p_profit",
   "percent",
-  "pghey",
-  "r_b"
+  "ghe+sellBuyPrice",
+  "ekh_profit",
+  "p_profit",
+  "leverage"
 ]
 
 var putTags = [
@@ -67,36 +75,14 @@ var putTags = [
 
 var Dir = ['0', 'asc']
 
-
-$.ajax({
-  type: "GET",
-  url: `${server}/option`,
-  contentType: "application/json; charset=utf-8",
-  dataType: "json",
-  success: function (data) {
-    totalData = data;
-
-    let tmp = []
-    for (let i in data.bData[0].val){
-      tmp.push(i)
-    }
-    console.log(data.bData[0])
-
-    if (Option=='Call'){
-      fillTableCall(data);
-    } else if (Option=='Put'){
-      fillTablePut(data)
-    } else {
-      fillTableCall(data);
-      fillTablePut(data)
-    }
-    
-    
-  },
-  error: function (errMsg) {
-    console.log(errMsg);
-  }
-});
+if (Option == 'Call') {
+  fillTableCall(totalData);
+} else if (Option == 'Put') {
+  fillTablePut(totalData)
+} else {
+  fillTableCall(totalData);
+  fillTablePut(totalData)
+}
 
 $('#callOption tbody').on('click', function (e) {
   $('tr').css({
@@ -114,12 +100,12 @@ $('#callOption #input input').keyup((event) => {
   }
 
   let counter = 1
-  for (let i of totalData.bData) {
-    if (Filter(i.val, name)) {
-      $(`#${i.i}`).show()
-      $(`#${i.i} td[name='count']`).html(counter++)
+  for (let row of totalData) {
+    if (Filter(row, name)) {
+      $(`#${row.instrumentId}`).show()
+      $(`#${row.instrumentId} td[name='count']`).html(counter++)
     } else {
-      $(`#${i.i}`).hide()
+      $(`#${row.instrumentId}`).hide()
     }
   }
 })
@@ -135,34 +121,34 @@ $('#callOption .head th').click((event) => {
 
 
   if (name != 'count') {
-    totalData.bData.sort((a, b) => {
+    totalData.sort((a, b) => {
 
       if (name == 'percent' || name == 'p_profit' || name == 'leverage') {
-        let _a = a.val[name]
-        let _b = b.val[name]
+        let _a = a[name]
+        let _b = b[name]
 
         if (Dir[1] == 'asc') {
-          return Number(_a) < Number(_b)
+          return Number(_a) < Number(_b) ? 1 : -1
         } else {
-          return Number(_a) > Number(_b)
+          return Number(_a) > Number(_b) ? 1 : -1
         }
 
       } else {
-        let _a = number(a.val[name])
-        let _b = number(b.val[name])
+        let _a = number(a[name])
+        let _b = number(b[name])
 
         if (isNaN(Number(_a))) {
           if (Dir[1] == 'asc') {
-            return _a < _b
+            return _a < _b ? 1 : -1
           } else {
-            return _a > _b
+            return _a > _b ? 1 : -1
           }
 
         } else {
           if (Dir[1] == 'asc') {
-            return Number(_a) < Number(_b)
+            return Number(_a) < Number(_b) ? 1 : -1
           } else {
-            return Number(_a) > Number(_b)
+            return Number(_a) > Number(_b) ? 1 : -1
           }
         }
       }
@@ -186,15 +172,15 @@ $('#putOption tbody').on('click', function (e) {
 })
 
 $('#putOption #input input').keyup((event) => {
-  
+
   let name = {}
   for (let i of putTags) {
     name[i] = $(`#putOption #input [name='${i}'] input`).val()
   }
 
   let counter = 1
-  for (let i of totalData.bData) {
-    if (Filter(i.val, name)) {
+  for (let i of totalData) {
+    if (Filter(i, name)) {
       $(`#${i.i2}`).show()
       $(`#${i.i2} td[name='count']`).html(counter++)
     } else {
@@ -214,11 +200,11 @@ $('#putOption .head th').click((event) => {
 
 
   if (name != 'count') {
-    totalData.bData.sort((a, b) => {
+    totalData.sort((a, b) => {
 
       if (name == 'percent' || name == 'p_profit' || name == 'leverage') {
-        let _a = a.val[name]
-        let _b = b.val[name]
+        let _a = a[name]
+        let _b = b[name]
 
         if (Dir[1] == 'asc') {
           return Number(_a) < Number(_b)
@@ -227,8 +213,8 @@ $('#putOption .head th').click((event) => {
         }
 
       } else {
-        let _a = number(a.val[name])
-        let _b = number(b.val[name])
+        let _a = number(a[name])
+        let _b = number(b[name])
 
         if (isNaN(Number(_a))) {
           if (Dir[1] == 'asc') {
@@ -261,31 +247,29 @@ $('#putOption .head th').click((event) => {
 
 function fillTableCall(data) {
   let counter = 1;
-  for (let i of data.bData) {
-    $(`<tr id=${i.i}></tr>`).appendTo('#callOption tbody').append(`
+  for (let i of data) {
+    $(`<tr id=${i.instrumentId}></tr>`).appendTo('#callOption tbody').append(`
     <td name="count">${counter++}</td>
-    <td style="display: none">${i.darayi}</td>
-    <td>${i.val.namad}</td>
-    <td>${i.val.name}</td>
-    <td dir='ltr'>${i.val.pghey}</td>
-    <td dir='ltr'>${i.val.mb}</td>
-    <td dir='ltr'>${i.val.hajm}</td>
-    <td dir='ltr'>${i.val.arzesh}</td>
-    <td dir='ltr'>${i.val.dm}</td>
-    <td dir='ltr'>${i.val.aghey}</td>
-    <td dir='ltr' style='clear:center; text-align:center; background-color:rgba(197, 197, 245, 0.5); color: black'>${i.val.bt_h}</td>
-    <td dir='ltr' style='clear:center; text-align:center; background-color:rgba(197, 197, 245, 0.5); color: black'>${i.val.bt_gh}</td>
-    <td dir='ltr' style='clear:center; text-align:center; background-color:rgba(255, 188, 188, 0.6); color: black'>${i.val.ba_gh}</td>
-    <td dir='ltr' style='clear:center; text-align:center; background-color:rgba(255, 188, 188, 0.6); color: black'>${i.val.ba_h}</td>
-    <td dir='ltr'>${i.val.ang}</td>
-    <td dir='ltr' style='color:${r_bColor(i.val.r_b)}'>${i.val.r_b}</td>
-    <td dir='ltr'>${i.val.ghe}</td>
-    <td dir='ltr' style='color:${colorPicker(i.val.ekh)}'>${i.val.ekh}</td>
-    <td dir='ltr'>${i.val.gh_s_p}</td>
-    <td dir='ltr' style='color:${colorPicker(i.val.percent)}'>${i.val.percent}</td>
-    <td dir='ltr' style='color:${Number(number(i.val.gh_s_p))>Number(number(i.val['ghe+ba_gh']))?'green':'red'}'>${i.val['ghe+ba_gh']}</td>
-    <td dir='ltr' style='color:${colorPicker(i.val.p_profit)}'>${i.val.p_profit}</td>
-    <td dir='ltr' style='clear:center; text-align:center;'>${i.val.leverage}</td>
+    <td>${i.instrumentName}</td>
+    <td>${i.companyNamePersian}</td>
+    <td dir='ltr'>${i.closingPrice}</td>
+    <td dir='ltr'>${i.moqeyateBaz}</td>
+    <td dir='ltr'>${i.tradeVolume}</td>
+    <td dir='ltr'>${i.tradeValue}</td>
+    <td dir='ltr'>${i.lastPrice}</td>
+    <td dir='ltr' style='clear:center; text-align:center; background-color:rgba(197, 197, 245, 0.5); color: black'>${i.buyQuantity}</td>
+    <td dir='ltr' style='clear:center; text-align:center; background-color:rgba(197, 197, 245, 0.5); color: black'>${i.buyBuyPrice}</td>
+    <td dir='ltr' style='clear:center; text-align:center; background-color:rgba(255, 188, 188, 0.6); color: black'>${i.sellBuyPrice}</td>
+    <td dir='ltr' style='clear:center; text-align:center; background-color:rgba(255, 188, 188, 0.6); color: black'>${i.sellBuyQuantity}</td>
+    <td dir='ltr'>${i.andazeQarardad}</td>
+    <td dir='ltr' style='color:${r_bColor(i.baghimandeTaSarresid)}'>${i.baghimandeTaSarresid}</td>
+    <td dir='ltr'>${i.qeymateEmal}</td>
+    <td dir='ltr' style='color:${colorPicker(i.ekh)}'>${i.ekh}</td>
+    <td dir='ltr'>${i.qeymateMabna}</td>
+    <td dir='ltr' style='color:${colorPicker(i.percent)}'>${i.percent}</td>
+    <td dir='ltr' style='color:${Number(number(i.gh_s_p))>Number(number(i['ghe+sellBuyPrice']))?'green':'red'}'>${i['ghe+sellBuyPrice']}</td>
+    <td dir='ltr' style='color:${colorPicker(i.p_profit)}'>${i.p_profit}</td>
+    <td dir='ltr' style='clear:center; text-align:center;'>${i.leverage}</td>
     `)
   }
 
@@ -295,8 +279,8 @@ function fillTableCall(data) {
   }
 
   counter = 1
-  for (let i of totalData.bData) {
-    if (Filter(i.val, name)) {
+  for (let i of totalData) {
+    if (Filter(i, name)) {
       $(`#${i.i}`).show()
       $(`#${i.i} td[name='count']`).html(counter++)
     } else {
@@ -307,31 +291,31 @@ function fillTableCall(data) {
 
 function fillTablePut(data) {
   let counter = 1;
-  for (let i of data.bData) {
+  for (let i of data) {
     $(`<tr id=${i.i2}></tr>`).appendTo('#putOption tbody').append(`
     <td name="count">${counter++}</td>
     <td style="display: none">${i.darayi}</td>
-    <td>${i.val.fo_namad}</td>
-    <td>${i.val.fo_name}</td>
-    <td dir='ltr'>${i.val.fo_pghey}</td>
-    <td dir='ltr'>${i.val.fo_mb==null || i.val.fo_mb=='' ? 0 : i.val.fo_mb}</td>
-    <td dir='ltr'>${i.val.fo_hajm}</td>
-    <td dir='ltr'>${i.val.fo_arzesh}</td>
-    <td dir='ltr'>${i.val.fo_dm}</td>
-    <td dir='ltr'>${i.val.fo_aghey}</td>
-    <td dir='ltr' style='clear:center; text-align:center; background-color:rgba(197, 197, 245, 0.5); color: black'>${i.val.fo_bt_h}</td>
-    <td dir='ltr' style='clear:center; text-align:center; background-color:rgba(197, 197, 245, 0.5); color: black'>${i.val.fo_bt_gh}</td>
-    <td dir='ltr' style='clear:center; text-align:center; background-color:rgba(255, 188, 188, 0.6); color: black'>${i.val.fo_ba_gh}</td>
-    <td dir='ltr' style='clear:center; text-align:center; background-color:rgba(255, 188, 188, 0.6); color: black'>${i.val.fo_ba_h}</td>
-    <td dir='ltr'>${i.val.ang}</td>
-    <td dir='ltr' style='color:${r_bColor(i.val.r_b)}'>${i.val.r_b}</td>
-    <td dir='ltr'>${i.val.ghe}</td>
-    <td dir='ltr' style='color:${colorPicker(i.val.ekh)}'>${i.val.ekh}</td>
-    <td dir='ltr'>${i.val.gh_s_p}</td>
-    <td dir='ltr' style='color:${colorPicker(i.val.percent)}'>${i.val.percent}</td>
-    <td dir='ltr' style='color:${Number(number(i.val.gh_s_p))>Number(number(i.val['ghe+ba_gh']))?'green':'red'}'>${i.val['ghe+ba_gh']}</td>
-    <td dir='ltr' style='color:${colorPicker(i.val.p_profit)}'>${i.val.p_profit}</td>
-    <td dir='ltr' style='clear:center; text-align:center;'>${i.val.leverage}</td>
+    <td>${i.fo_namad}</td>
+    <td>${i.fo_name}</td>
+    <td dir='ltr'>${i.fo_pghey}</td>
+    <td dir='ltr'>${i.fo_mb==null || i.fo_mb=='' ? 0 : i.fo_mb}</td>
+    <td dir='ltr'>${i.fo_hajm}</td>
+    <td dir='ltr'>${i.fo_arzesh}</td>
+    <td dir='ltr'>${i.fo_dm}</td>
+    <td dir='ltr'>${i.fo_aghey}</td>
+    <td dir='ltr' style='clear:center; text-align:center; background-color:rgba(197, 197, 245, 0.5); color: black'>${i.fo_bt_h}</td>
+    <td dir='ltr' style='clear:center; text-align:center; background-color:rgba(197, 197, 245, 0.5); color: black'>${i.fo_bt_gh}</td>
+    <td dir='ltr' style='clear:center; text-align:center; background-color:rgba(255, 188, 188, 0.6); color: black'>${i.fo_ba_gh}</td>
+    <td dir='ltr' style='clear:center; text-align:center; background-color:rgba(255, 188, 188, 0.6); color: black'>${i.fo_ba_h}</td>
+    <td dir='ltr'>${i.ang}</td>
+    <td dir='ltr' style='color:${r_bColor(i.r_b)}'>${i.r_b}</td>
+    <td dir='ltr'>${i.ghe}</td>
+    <td dir='ltr' style='color:${colorPicker(i.ekh)}'>${i.ekh}</td>
+    <td dir='ltr'>${i.gh_s_p}</td>
+    <td dir='ltr' style='color:${colorPicker(i.percent)}'>${i.percent}</td>
+    <td dir='ltr' style='color:${Number(number(i.gh_s_p))>Number(number(i['ghe+ba_gh']))?'green':'red'}'>${i['ghe+ba_gh']}</td>
+    <td dir='ltr' style='color:${colorPicker(i.p_profit)}'>${i.p_profit}</td>
+    <td dir='ltr' style='clear:center; text-align:center;'>${i.leverage}</td>
     `)
   }
 
@@ -341,8 +325,8 @@ function fillTablePut(data) {
   }
 
   counter = 1
-  for (let i of totalData.bData) {
-    if (Filter(i.val, name)) {
+  for (let i of totalData) {
+    if (Filter(i, name)) {
       $(`#${i.i2}`).show()
       $(`#${i.i2} td[name='count']`).html(counter++)
     } else {
@@ -353,15 +337,14 @@ function fillTablePut(data) {
 
 
 function number(a) {
-  let _a = a.replaceAll(',', '')
-  if (a.includes('M') || a.includes('B')){
-    _a = _a.replace('.', '')
-    _a = _a.replace(' M', '00000')
-    _a = _a.replace(' B', '00000000')
-  }
+  // let _a = a.replaceAll(',', '')
+  // if (a.includes('M') || a.includes('B')){
+  //   _a = _a.replace('.', '')
+  //   _a = _a.replace(' M', '00000')
+  //   _a = _a.replace(' B', '00000000')
+  // }
 
-
-  return _a
+  return a
 }
 
 
@@ -378,8 +361,6 @@ function colorPicker(n) {
   } else {
     return 'black'
   }
-
-
 }
 
 function r_bColor(n) {
@@ -391,18 +372,17 @@ function r_bColor(n) {
   }
 }
 
-
 function Filter(val, param) {
   for (let i in param) {
-    if (param[i] != "") {
-      if (i == 'name' || i == 'namad' || i == 'fo_name' || i == 'fo_namad') {
+    if (param[i] && param[i] != "") {
+      if (i == 'instrumentName' || i == 'companyNamePersian' || i == 'sellInstrumentName' || i == 'sellCompanyNamePersian') {
         if (!val[i].includes(param[i])) {
           return false;
         }
       } else {
         let tmp = param[i].split(' ')
         if (tmp.length == 1) {
-          if (Number(number(val[i])) != param[i]) {
+          if (Number(number(val[i])) != Number(param[i])) {
             return false;
           }
         } else {
@@ -449,7 +429,6 @@ function Filter(val, param) {
           }
         }
       }
-
     }
   }
   return true

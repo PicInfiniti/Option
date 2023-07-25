@@ -1,10 +1,7 @@
 import $ from "jquery"
 import './assets/sass/style.sass'
 
-
-
-var server = 'http://localhost:5000/'
-var totalData;
+import totalData from './data.json';
 
 var Option = 'Call'
 
@@ -68,35 +65,14 @@ var putTags = [
 var Dir = ['0', 'asc']
 
 
-$.ajax({
-  type: "GET",
-  url: `${server}/option`,
-  contentType: "application/json; charset=utf-8",
-  dataType: "json",
-  success: function (data) {
-    totalData = data;
-
-    let tmp = []
-    for (let i in data.bData[0].val){
-      tmp.push(i)
-    }
-    console.log(data.bData[0])
-
-    if (Option=='Call'){
-      fillTableCall(data);
-    } else if (Option=='Put'){
-      fillTablePut(data)
-    } else {
-      fillTableCall(data);
-      fillTablePut(data)
-    }
-    
-    
-  },
-  error: function (errMsg) {
-    console.log(errMsg);
-  }
-});
+if (Option=='Call'){
+  fillTableCall(totalData);
+} else if (Option=='Put'){
+  fillTablePut(totalData)
+} else {
+  fillTableCall(totalData);
+  fillTablePut(totalData)
+}
 
 $('#callOption tbody').on('click', function (e) {
   $('tr').css({
@@ -142,9 +118,9 @@ $('#callOption .head th').click((event) => {
         let _b = b.val[name]
 
         if (Dir[1] == 'asc') {
-          return Number(_a) < Number(_b)
+          return Number(_a) < Number(_b) ? 1 : -1
         } else {
-          return Number(_a) > Number(_b)
+          return Number(_a) > Number(_b) ? 1 : -1
         }
 
       } else {
@@ -153,16 +129,16 @@ $('#callOption .head th').click((event) => {
 
         if (isNaN(Number(_a))) {
           if (Dir[1] == 'asc') {
-            return _a < _b
+            return _a < _b ? 1 : -1
           } else {
-            return _a > _b
+            return _a > _b ? 1 : -1
           }
 
         } else {
           if (Dir[1] == 'asc') {
-            return Number(_a) < Number(_b)
+            return Number(_a) < Number(_b) ? 1 : -1
           } else {
-            return Number(_a) > Number(_b)
+            return Number(_a) > Number(_b) ? 1 : -1
           }
         }
       }

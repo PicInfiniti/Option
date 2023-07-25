@@ -1,7 +1,6 @@
 
 import requests, json, time
 
-from pymongo import MongoClient
 
 taxes = 1.012512
 
@@ -31,12 +30,6 @@ def int2base(x, base):
   return ''.join(digits)
 
 
-
-
-tsetmc = MongoClient("mongodb://localhost/")["tsetmc"]
-OPTION = tsetmc.option
-
-
 def number(a):
   a = a.replace(',', '').replace('.', '').replace(' M', '00000').replace(' B', '00000000')
   return int(a)
@@ -64,13 +57,12 @@ def Simplify(Data):
 
   
 if __name__=='__main__':
-  res = requests.get('https://tse.ir/json/MarketWatch/data_7.json',verify = False).content
+  res = requests.get('https://old.tse.ir/json/MarketWatch/data_7.json',verify = False).content
   res = json.loads(res)
   res.update({
     '_id': int2base(time.time(), 32)
   })
   Simplify(res['bData'])
   
-  
-  OPTION.delete_many({})
-  OPTION.insert_one(res)
+  with open("src/data.json", "w") as data:
+    json.dump(res, data, indent=2, ensure_ascii=False)

@@ -92,11 +92,11 @@ def Simplify(Data):
 
 
     tmp['ekh'] = tmp['qeymateMabna'] - tmp['qeymateEmal']
-    tmp['percent'] = round(tmp['ekh'] / tmp['qeymateMabna']*100, 2)
+    tmp['percent'] = round((tmp['ekh'] / tmp['qeymateMabna'])*100, 2)
     tmp['ghe+sellBuyPrice'] = round(tmp['qeymateEmal']*taxes + tmp['sellBuyPrice'], 2)
     tmp['ekh_profit'] = round(tmp['qeymateMabna'] - tmp['ghe+sellBuyPrice'], 2)
     tmp['p_profit'] = round((tmp['ekh_profit'] / tmp['qeymateMabna'])*100, 2)
-    tmp['leverage'] = round(tmp['qeymateMabna']/tmp['sellBuyPrice'], 2) if tmp['sellBuyPrice']  else 0
+    tmp['leverage'] = round(tmp['qeymateMabna']/tmp['sellBuyPrice'], 2) if tmp['sellBuyPrice'] else 0
     
     # tmp['ekh'] = '{:,}'.format(tmp['ekh'])
     # tmp['percent'] = '{:,}'.format(tmp['percent'])

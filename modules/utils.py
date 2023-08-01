@@ -43,14 +43,14 @@ def Simplify(Data):
     }
     i['val']['ekh'] = number(i['val']['gh_s_p']) - number(i['val']['ghe'])
     i['val']['percent'] = round(i['val']['ekh'] / number(i['val']['gh_s_p'])*100, 2)
-    i['val']['ghe+ba_gh'] = round(number(i['val']['ghe'])*taxes) + number(i['val']['ba_gh'])
-    i['val']['ekh_profit'] = number(i['val']['gh_s_p']) - i['val']['ghe+ba_gh']
+    i['val']['ghePba_gh'] = round(number(i['val']['ghe'])*taxes) + number(i['val']['ba_gh'])
+    i['val']['ekh_profit'] = number(i['val']['gh_s_p']) - i['val']['ghePba_gh']
     i['val']['p_profit'] = round(i['val']['ekh_profit'] / number(i['val']['gh_s_p'])*100, 2)
     i['val']['leverage'] = round(number(i['val']['gh_s_p'])/number(i['val']['ba_gh']), 2) if number(i['val']['ba_gh'])  else 0
     
     i['val']['ekh'] = '{:,}'.format(i['val']['ekh'])
     i['val']['percent'] = '{:,}'.format(i['val']['percent'])
-    i['val']['ghe+ba_gh'] = '{:,}'.format(i['val']['ghe+ba_gh'])
+    i['val']['ghePba_gh'] = '{:,}'.format(i['val']['ghePba_gh'])
     i['val']['ekh_profit'] = '{:,}'.format(i['val']['ekh_profit'])
     i['val']['p_profit'] = '{:,}'.format(i['val']['p_profit'])
     i['val']['leverage'] = '{:,}'.format(i['val']['leverage'])
@@ -62,7 +62,7 @@ if __name__=='__main__':
   res.update({
     '_id': int2base(time.time(), 32)
   })
-  Simplify(res['bData'])
+  # Simplify(res['bData'])
   
   with open("src/data.json", "w") as data:
     json.dump(res, data, indent=2, ensure_ascii=False)

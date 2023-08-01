@@ -1,19 +1,28 @@
 import $ from "jquery"
 import './assets/sass/style.sass'
-
+import {
+  parsJson
+} from './assets/js/counter'
 import totalData from './data.json';
+
+parsJson(totalData.bData)
+console.log(totalData)
 
 var Option = 'Call'
 
-if(window.location.pathname.includes('put')){
-  $('#callOption').css({display: 'none'})
-  Option='Put'
+if (window.location.pathname.includes('put')) {
+  $('#callOption').css({
+    display: 'none'
+  })
+  Option = 'Put'
 } else {
-  if(!window.location.pathname.includes('call')){
+  if (!window.location.pathname.includes('call')) {
     window.location.pathname = '/call'
   }
-  $('#putOption').css({display: 'none'})
-  Option='Call'
+  $('#putOption').css({
+    display: 'none'
+  })
+  Option = 'Call'
 }
 
 
@@ -30,7 +39,7 @@ var callTags = [
   "ekh",
   "gh_s_p",
   "ghe",
-  "ghe+ba_gh",
+  "ghePba_gh",
   "hajm",
   "leverage",
   "mb",
@@ -58,16 +67,16 @@ var putTags = [
   "fo_pghey",
   "gh_s_p",
   "ghe",
-  "ghe+ba_gh",
+  "ghePba_gh",
   "r_b"
 ]
 
 var Dir = ['0', 'asc']
 
 
-if (Option=='Call'){
+if (Option == 'Call') {
   fillTableCall(totalData);
-} else if (Option=='Put'){
+} else if (Option == 'Put') {
   fillTablePut(totalData)
 } else {
   fillTableCall(totalData);
@@ -114,8 +123,9 @@ $('#callOption .head th').click((event) => {
     totalData.bData.sort((a, b) => {
 
       if (name == 'percent' || name == 'p_profit' || name == 'leverage') {
-        let _a = a.val[name]
-        let _b = b.val[name]
+
+        let _a = number(a.val[name])
+        let _b = number(b.val[name])
 
         if (Dir[1] == 'asc') {
           return Number(_a) < Number(_b) ? 1 : -1
@@ -162,7 +172,7 @@ $('#putOption tbody').on('click', function (e) {
 })
 
 $('#putOption #input input').keyup((event) => {
-  
+
   let name = {}
   for (let i of putTags) {
     name[i] = $(`#putOption #input [name='${i}'] input`).val()
@@ -197,9 +207,9 @@ $('#putOption .head th').click((event) => {
         let _b = b.val[name]
 
         if (Dir[1] == 'asc') {
-          return Number(_a) < Number(_b)
+          return Number(_a) < Number(_b) ? 1 : -1
         } else {
-          return Number(_a) > Number(_b)
+          return Number(_a) > Number(_b) ? 1 : -1
         }
 
       } else {
@@ -208,16 +218,16 @@ $('#putOption .head th').click((event) => {
 
         if (isNaN(Number(_a))) {
           if (Dir[1] == 'asc') {
-            return _a < _b
+            return _a < _b ? 1 : -1
           } else {
-            return _a > _b
+            return _a > _b ? 1 : -1
           }
 
         } else {
           if (Dir[1] == 'asc') {
-            return Number(_a) < Number(_b)
+            return Number(_a) < Number(_b) ? 1 : -1
           } else {
-            return Number(_a) > Number(_b)
+            return Number(_a) > Number(_b) ? 1 : -1
           }
         }
       }
@@ -259,7 +269,7 @@ function fillTableCall(data) {
     <td dir='ltr' style='color:${colorPicker(i.val.ekh)}'>${i.val.ekh}</td>
     <td dir='ltr'>${i.val.gh_s_p}</td>
     <td dir='ltr' style='color:${colorPicker(i.val.percent)}'>${i.val.percent}</td>
-    <td dir='ltr' style='color:${Number(number(i.val.gh_s_p))>Number(number(i.val['ghe+ba_gh']))?'green':'red'}'>${i.val['ghe+ba_gh']}</td>
+    <td dir='ltr' style='color:${Number(number(i.val.gh_s_p))>Number(number(i.val['ghePba_gh']))?'green':'red'}'>${i.val['ghePba_gh']}</td>
     <td dir='ltr' style='color:${colorPicker(i.val.p_profit)}'>${i.val.p_profit}</td>
     <td dir='ltr' style='clear:center; text-align:center;'>${i.val.leverage}</td>
     `)
@@ -305,7 +315,7 @@ function fillTablePut(data) {
     <td dir='ltr' style='color:${colorPicker(i.val.ekh)}'>${i.val.ekh}</td>
     <td dir='ltr'>${i.val.gh_s_p}</td>
     <td dir='ltr' style='color:${colorPicker(i.val.percent)}'>${i.val.percent}</td>
-    <td dir='ltr' style='color:${Number(number(i.val.gh_s_p))>Number(number(i.val['ghe+ba_gh']))?'green':'red'}'>${i.val['ghe+ba_gh']}</td>
+    <td dir='ltr' style='color:${Number(number(i.val.gh_s_p))>Number(number(i.val['ghePba_gh']))?'green':'red'}'>${i.val['ghePba_gh']}</td>
     <td dir='ltr' style='color:${colorPicker(i.val.p_profit)}'>${i.val.p_profit}</td>
     <td dir='ltr' style='clear:center; text-align:center;'>${i.val.leverage}</td>
     `)
@@ -330,7 +340,7 @@ function fillTablePut(data) {
 
 function number(a) {
   let _a = a.replaceAll(',', '')
-  if (a.includes('M') || a.includes('B')){
+  if (a.includes('M') || a.includes('B')) {
     _a = _a.replace('.', '')
     _a = _a.replace(' M', '00000')
     _a = _a.replace(' B', '00000000')
@@ -430,3 +440,15 @@ function Filter(val, param) {
   }
   return true
 }
+
+// $.ajax({
+//   url: 'https://old.tse.ir/json/MarketWatch/data_7.json', // Replace with your API endpoint
+//   type: 'GET',
+//   success: function(data) {
+//       console.log(data)
+//   },
+//   error: function(xhr, status, error) {
+//       // AJAX request encountered an error, handle the error
+//       $('#result').html('Error: ' + error);
+//   }
+// });

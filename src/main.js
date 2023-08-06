@@ -3,11 +3,11 @@ import './assets/sass/style.sass'
 import {
   parsJson
 } from './assets/js/counter'
-import totalData from './data.json';
+// import totalData from './data.json';
 
-parsJson(totalData.bData)
-console.log(totalData)
+// parsJson(totalData.bData)
 
+var totalData
 var Option = 'Call'
 
 if (window.location.pathname.includes('put')) {
@@ -73,15 +73,37 @@ var putTags = [
 
 var Dir = ['0', 'asc']
 
+$.ajax({
+  url: 'https://old.tse.ir/json/MarketWatch/data_7.json', // Replace with your API endpoint
+  type: 'GET',
+  success: function (data) {
+    totalData = data
+    parsJson(totalData.bData)
+    if (Option == 'Call') {
+      fillTableCall(totalData);
+    } else if (Option == 'Put') {
+      fillTablePut(totalData)
+    } else {
+      fillTableCall(totalData);
+      fillTablePut(totalData)
+    }
 
-if (Option == 'Call') {
-  fillTableCall(totalData);
-} else if (Option == 'Put') {
-  fillTablePut(totalData)
-} else {
-  fillTableCall(totalData);
-  fillTablePut(totalData)
-}
+  },
+  error: function (xhr, status, error) {
+    // AJAX request encountered an error, handle the error
+    $('#result').html('Error: ' + error);
+  }
+});
+
+
+// if (Option == 'Call') {
+//   fillTableCall(totalData);
+// } else if (Option == 'Put') {
+//   fillTablePut(totalData)
+// } else {
+//   fillTableCall(totalData);
+//   fillTablePut(totalData)
+// }
 
 $('#callOption tbody').on('click', function (e) {
   $('tr').css({
@@ -440,15 +462,3 @@ function Filter(val, param) {
   }
   return true
 }
-
-// $.ajax({
-//   url: 'https://old.tse.ir/json/MarketWatch/data_7.json', // Replace with your API endpoint
-//   type: 'GET',
-//   success: function(data) {
-//       console.log(data)
-//   },
-//   error: function(xhr, status, error) {
-//       // AJAX request encountered an error, handle the error
-//       $('#result').html('Error: ' + error);
-//   }
-// });

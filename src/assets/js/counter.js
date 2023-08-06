@@ -19,22 +19,18 @@ export function parsJson(data) {
 
     i.val = tmp
     i.val.ekh = number(i.val.gh_s_p) - number(i.val.ghe)
-    i.val.percent = i.val.ekh / number(i.val.gh_s_p) * 100
-    i.val.percent.toFixed(2)
+    i.val.percent = (i.val.ekh / number(i.val.gh_s_p)) * 100
     i.val.ghePba_gh = number(i.val.ghe) * taxes + number(i.val.ba_gh)
-    i.val.ghePba_gh.toFixed(2)
     i.val.ekh_profit = number(i.val.gh_s_p) - i.val.ghePba_gh
-    i.val.p_profit = i.val.ekh_profit / number(i.val.gh_s_p) * 100
-    i.val.p_profit.toFixed(2)
+    i.val.p_profit = (i.val.ekh_profit / number(i.val.gh_s_p)) * 100
     i.val.leverage = number(i.val.ba_gh)!=0 ? number(i.val.gh_s_p) / number(i.val.ba_gh) : 0
-    i.val.leverage.toFixed(2)
 
-    i.val.ekh = i.val.ekh.toLocaleString()
-    i.val.percent = i.val.percent.toLocaleString()
-    i.val.ghePba_gh = i.val.ghePba_gh.toLocaleString()
-    i.val.ekh_profit = i.val.ekh_profit.toLocaleString()
-    i.val.p_profit = i.val.p_profit.toLocaleString()
-    i.val.leverage = i.val.leverage.toLocaleString()
+    i.val.ekh = i.val.ekh.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})
+    i.val.percent = i.val.percent.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})
+    i.val.ghePba_gh = i.val.ghePba_gh.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})
+    i.val.ekh_profit = i.val.ekh_profit.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})
+    i.val.p_profit = i.val.p_profit.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})
+    i.val.leverage = i.val.leverage.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})
 
   }
 
